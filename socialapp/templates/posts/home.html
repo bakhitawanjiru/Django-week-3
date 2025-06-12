@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row min-vh-100 align-items-center justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="mb-5">
+                <h1 class="display-2 fw-bold text-primary mb-4">Welcome to Spill</h1>
+                <p class="lead text-muted mb-5">Connect with friends, share your thoughts, and stay updated with what matters to you.</p>
+            </div>
+
+            {% if user.is_authenticated %}
+                <div class="d-grid gap-3 col-lg-6 mx-auto">
+                    <a href="{% url 'posts:news-feed' %}" class="btn btn-primary btn-lg shadow-sm">
+                        <i class="fas fa-newspaper me-2"></i>Go to News Feed
+                    </a>
+                </div>
+            {% else %}
+                <div class="d-grid gap-3 col-lg-6 mx-auto">
+                    <a href="{% url 'users:login' %}" class="btn btn-primary btn-lg shadow-sm">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                    <a href="{% url 'users:register' %}" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </a>
+                </div>
+            {% endif %}
+
+            <div class="mt-5">
+                <div class="row g-4 justify-content-center text-center">
+                    <div class="col-md-4">
+                        <div class="p-4 bg-light rounded-3 shadow-sm">
+                            <i class="fas fa-users fa-2x text-primary mb-3"></i>
+                            <h5>Connect</h5>
+                            <p class="text-muted small">Find and connect with people who share your interests</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-4 bg-light rounded-3 shadow-sm">
+                            <i class="fas fa-share-alt fa-2x text-primary mb-3"></i>
+                            <h5>Share</h5>
+                            <p class="text-muted small">Share your thoughts, photos, and experiences</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-4 bg-light rounded-3 shadow-sm">
+                            <i class="fas fa-bell fa-2x text-primary mb-3"></i>
+                            <h5>Stay Updated</h5>
+                            <p class="text-muted small">Get notified about what matters to you</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .btn-lg {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+    .shadow-sm {
+        transition: all 0.3s ease;
+    }
+    .shadow-sm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+</style>
+{% endblock %}

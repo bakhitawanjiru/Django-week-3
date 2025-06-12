@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}News Feed{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+       
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" action="{% url 'create-post' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <textarea class="form-control" name="content" rows="3" placeholder="What's on your mind?"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" class="form-control" name="image" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </form>
+            </div>
+             </div>
+             
+        <div id="posts-container">
+            {% for post in posts %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">{{ post.author.username }}</h5>
+                            <small class="text-muted">{{ post.created_at|timesince }} ago</small>
+                        </div>
+                        <p class="card-text">{{ post.content }}</p>
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" alt="Post image" style="max-width: 100%; height: auto;">
+                        {% endif %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <button class="btn btn-sm {% if post.is_liked %}btn-primary{% else %}btn-outline-primary{% endif %} like-btn" 
+                                        data-post-id="{{ post.id }}">
+                                    Like ({{ post.like_count }})
+                                </button>
+                                 <button class="btn btn-sm btn-outline-secondary comment-btn" 
+                                        data-post-id="{{ post.id }}">
+                                    Comment ({{ post.comments.count }})
+                                </button>
+                            </div>
+                            {% if post.author == user %}
+                                <div>
+                                    <button class="btn btn-sm btn-outline-danger delete-btn" 
+                                            data-post-id="{{ post.id }}">Delete</button>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-info">No posts to show.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-md-4">
+          <!-- Trending Hashtags -->
+        <div class="card mb-4">
+            <div class="card-header">
+                Trending Hashtags
+            </div>
+            <div class="card-body">
+                {% for hashtag in trending_hashtags %}
+                    <a href="{% url 'posts-by-hashtag' hashtag.name %}" 
+                       class="btn btn-outline-primary btn-sm mb-2 me-2">
+                        #{{ hashtag.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Like functionality
+    document.querySelectorAll('.like-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const postId = this.dataset.postId;
+            fetch(`/api/posts/${postId}/like/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update like button state
+                this.classList.toggle('btn-primary');
+                this.classList.toggle('btn-outline-primary');
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

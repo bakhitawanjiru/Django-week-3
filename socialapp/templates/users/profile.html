@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Profile Information -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        {% if profile_user.profile.avatar %}
+                            <img src="{{ profile_user.profile.avatar.url }}" class="rounded-circle" width="150" alt="Profile Picture">
+                        {% else %}
+                            <img src="{{ MEDIA_URL }}profile_pics/default.jpg" class="rounded-circle" width="150" alt="Default Profile Picture">
+                        {% endif %}
+                    </div>
+                    <h4 class="card-title text-center">{{ profile_user.username }}</h4>
+                    <p class="card-text">{{ profile_user.profile.bio }}</p>
+                    {% if is_own_profile %}
+                        <a href="{% url 'users:profile-edit' %}" class="btn btn-primary w-100">Edit Profile</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Posts Section -->
+        <div class="col-md-8">
+            {% if is_own_profile %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Create New Post</h5>
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Display Posts -->
+            {% for post in posts %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" class="card-img-top mb-3" alt="Post image">
+                        {% endif %}
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.content }}</p>
+                        <p class="text-muted small">
+                            Posted {{ post.created_at|timesince }} ago
+                            {% if post.updated_at and post.updated_at != post.created_at %}
+                                (edited {{ post.updated_at|timesince }} ago)
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="card">
+                    <div class="card-body">
+                        <p class="text-center text-muted">No posts yet.</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -99,8 +99,9 @@ WSGI_APPLICATION = 'socialproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES =  dj_database_url.parse('postgresql://calo_tracker_user:X15bMgwKaQ4ZdjnfLf6xETsns9XVF27I@dpg-d0uoimje5dus739uc1jg-a.oregon-postgres.render.com/calo_tracker')
-
+DATABASES ={ 
+    'default': dj_database_url.parse('postgresql://calo_tracker_user:X15bMgwKaQ4ZdjnfLf6xETsns9XVF27I@dpg-d0uoimje5dus739uc1jg-a.oregon-postgres.render.com/calo_tracker')
+}
 
 
 # Password validation

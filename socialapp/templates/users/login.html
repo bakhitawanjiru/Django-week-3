@@ -10,16 +10,17 @@
                     <h2 class="text-center mb-4">Login</h2>
                     
                     {% if form.errors %}
-                    <div class="alert alert-danger">
-                        Please enter a correct username and password. 
-                        Note that both fields may be case-sensitive.
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <p>Please enter a correct username and password. Note that both fields may be case-sensitive.</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                     {% endif %}
 
                     {% if messages %}
                         {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }}">
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
                                 {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         {% endfor %}
                     {% endif %}
@@ -27,11 +28,13 @@
                     <form method="post" novalidate>
                         {% csrf_token %}
                         {{ form|crispy }}
-                        <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
+                        <div class="d-grid gap-2 mt-3">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
                     </form>
                     
                     <div class="text-center mt-3">
-                        <small>Don't have an account? <a href="{% url 'users:register' %}">Register here</a></small>
+                        <p>Don't have an account? <a href="{% url 'users:register' %}">Register here</a></p>
                     </div>
                 </div>
             </div>

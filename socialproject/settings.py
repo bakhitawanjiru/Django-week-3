@@ -18,18 +18,14 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Try to load .env file, but don't fail if it doesn't exist
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-for-dev')
+SECRET_KEY = 'django-insecure-d++2*d+3f*x%m(o7&6)x&o^oub%3yfet$u_+quvr49$hk+d!12'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -103,12 +99,9 @@ WSGI_APPLICATION = 'socialproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3',
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
+DATABASES ={ 
+    
+'default': dj_database_url.parse('postgresql://calo_tracker_user:X15bMgwKaQ4ZdjnfLf6xETsns9XVF27I@dpg-d0uoimje5dus739uc1jg-a.oregon-postgres.render.com/calo_tracker')
 }
 
 
@@ -121,6 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -135,6 +131,22 @@ REST_FRAMEWORK = {
     ],
 }
 
+# Authentication settings
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'posts:news-feed'
+LOGOUT_REDIRECT_URL = 'users:login'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+# Session settings
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 1209600  # 2 weeks
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Authentication backends
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
@@ -178,8 +190,3 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Authentication settings
-LOGIN_URL = 'users:login'
-LOGIN_REDIRECT_URL = 'posts:news-feed'
-LOGOUT_REDIRECT_URL = 'users:login'

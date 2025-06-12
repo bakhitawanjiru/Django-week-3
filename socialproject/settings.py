@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,7 @@ SECRET_KEY = 'django-insecure-d++2*d+3f*x%m(o7&6)x&o^oub%3yfet$u_+quvr49$hk+d!12
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -99,10 +100,7 @@ WSGI_APPLICATION = 'socialproject.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+   dj_database_url.parse('postgresql://calo_tracker_user:X15bMgwKaQ4ZdjnfLf6xETsns9XVF27I@dpg-d0uoimje5dus739uc1jg-a.oregon-postgres.render.com/calo_tracker')
 }
 
 
